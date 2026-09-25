@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FocusMe · Bone-Conduction-Guided Speech Enhancement</title>
+<meta name="description" content="FocusMe: a causal, enrollment-free AC-BC speech enhancement system. Method overview and audio demo." />
+<meta property="og:title" content="FocusMe · Bone-Conduction-Guided Speech Enhancement" />
+<meta property="og:description" content="Causal multi-modal speech enhancement with cross-attention AC-BC fusion and BC-derived speaker cues. Listen to the samples." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="is-loading">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============================ NAV ============================ -->
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0v4.2a2.8 2.8 0 0 1-2.8 2.8h-1.4v-6h3.1M4 13v6a2.8 2.8 0 0 0 2.8 2.8H8.2v-6H4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="brand-text">Focus<strong>Me</strong></span>
+    </a>
+
+    <nav class="nav" aria-label="Section navigation">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#demo">Audio Demo</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn btn-ghost blind-btn" id="blindBtn" type="button" aria-pressed="false"
+              title="Hide model names for blind listening">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="ic"><path d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.8 2.8M9.4 5.4A9.8 9.8 0 0 1 12 5c4.6 0 8.3 3 10 7-.6 1.4-1.5 2.7-2.6 3.7M6.3 6.5C4.4 7.8 2.9 9.7 2 12c1.7 4 5.4 7 10 7 1.3 0 2.5-.2 3.6-.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Blind mode</span>
+      </button>
+      <button class="btn btn-icon" id="themeBtn" type="button" aria-label="Toggle colour theme" title="Toggle colour theme">
+        <svg viewBox="0 0 24 24" class="ic ic-sun" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.6v2.2M12 19.2v2.2M4.4 12H2.2M21.8 12h-2.2M6.3 6.3 4.8 4.8M19.2 19.2l-1.5-1.5M17.7 6.3l1.5-1.5M4.8 19.2l1.5-1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" class="ic ic-moon" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================ HERO ============================ -->
+<section class="hero" id="top">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <p class="venue"><span class="venue-dot"></span>ICLR 2027 submission · under double-blind review</p>
+
+    <h1 class="title">FocusMe: Bone-Conduction-Guided Speech Enhancement<br class="br-lg" /> in Challenging Acoustic Scenarios</h1>
+
+    <p class="authors"><span class="author">Anonymous Authors</span></p>
+    <p class="affil">Anonymous Institution &nbsp;·&nbsp; <span class="muted">Paper under double-blind review</span></p>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="#demo">
+        <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="2.6" y="13" width="4.2" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="17.2" y="13" width="4.2" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        Listen to samples
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ABSTRACT ============================ -->
+<section class="section" id="abstract">
+  <div class="wrap">
+    <h2 class="section-title">Abstract</h2>
+    <div class="abstract-card">
+      <p>
+        Recovering a target speech from an air-conduction (AC) mixture is challenging under extreme noise and
+        competing speech. We present <strong>FocusMe</strong>, a causal multi-modal speech enhancement system that uses
+        synchronized bone-conduction (BC) speech as complementary acoustic evidence and an enrollment-free speaker cue.
+        To fuse AC and BC features, we introduce a <strong>Cross-Attention Feature Fusion (CAFF)</strong> module, which uses AC
+        features as queries over BC keys and values, then combines the modalities through a learned gate and bounded
+        complex residual. In parallel, an <strong>extractor</strong> composed of causal dilated residual blocks derives frame-level
+        speaker representations from BC log-Mel features and injects them into the backbone network. We jointly optimize
+        target-speech reconstruction and frame-level speaker classification. Across the tested conditions, FocusMe
+        achieved the best average PESQ, STOI, ESTOI, DNSMOS, and CER, while remaining competitive in SI-SDR.
+      </p>
+      <dl class="keywords">
+        <dt>Keywords</dt>
+        <dd>bone conduction speech · multimodal speech enhancement · multi-task learning · speaker representation</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ METHOD ============================ -->
+<section class="section" id="method">
+  <div class="wrap">
+    <h2 class="section-title">Method Overview</h2>
+    <figure class="figure">
+      <div class="figure-frame">
+        <img class="arch" src="assets/img/pipeline.png"
+             alt="FocusMe architecture: an AC mixture and its synchronised BC recording are transformed by STFT; AC and BC features are fused by CAFF; a five-stage causal encoder feeds an F-GRU, is concatenated with the frame-level speaker embedding E_bc from the BC log-Mel branch, passes through a T-GRU and a five-stage decoder, and a sigmoid gives the complex ratio mask M applied by the CCM block before iSTFT." />
+      </div>
+      <figcaption>
+        <strong>Figure 1.</strong> Overview of FocusMe. Synchronised AC and BC streams are fused by CAFF, while a
+        BC log-Mel branch yields frame-level speaker embeddings (FSE) that condition the causal reconstruction backbone.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ AUDIO DEMO ============================ -->
+<section class="section section-demo" id="demo">
+  <div class="wrap">
+    <h2 class="section-title">Audio Demo</h2>
+    <p class="lead">
+      Each row shows one test mixture. <em>Clean target</em> is the reconstruction reference,
+      <em>Noisy AC mixture</em> is the system input and <em>Bone conduction</em> is the synchronised BC
+      recording. The five AC–BC baselines follow, with FocusMe last. Headphones recommended.
+    </p>
+
+    <div class="demo-toolbar">
+      <div class="tabs" id="demoTabs" role="tablist" aria-label="Test conditions"></div>
+      <div class="toolbar-side">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span class="muted small" id="nowPlaying">Nothing playing</span>
+      </div>
+    </div>
+
+    <div id="demoPanel" class="demo-panel"></div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>FocusMe · demo page · built with plain HTML/CSS/JS — no external dependencies.</p>
+    <p class="muted small">Last updated: <span id="updated">—</span> · Template by the authors</p>
+  </div>
+</footer>
+
+<template id="conditionTemplate">
+  <section class="cond-panel" role="tabpanel" hidden>
+    <div class="samples"></div>
+  </section>
+</template>
+
+<template id="sampleTemplate">
+  <article class="sample">
+    <header class="sample-head">
+      <h3 class="sample-title"></h3>
+      <p class="sample-text"></p>
+      <p class="sample-meta small muted"></p>
+    </header>
+    <div class="player-grid"></div>
+  </article>
+</template>
+
+<template id="columnTemplate">
+  <div class="col">
+    <div class="col-head">
+      <span class="col-name"></span>
+      <a class="col-dl" download title="Download this wav">
+        <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="col-slot"></div>
+  </div>
+</template>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

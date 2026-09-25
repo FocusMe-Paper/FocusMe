@@ -1,0 +1,427 @@
+/* =========================================================================
+   FocusMe demo page — stylesheet
+   Design tokens -> layout -> components -> sections -> responsive
+   ========================================================================= */
+
+/* ------------------------------- tokens ------------------------------- */
+:root {
+  --bg:        #f6f7fb;
+  --bg-soft:   #eef1f8;
+  --surface:   #ffffff;
+  --surface-2: #f3f5fa;
+  --text:      #111827;
+  --text-soft: #37415a;
+  --muted:     #66708c;
+  --border:    #e3e7f1;
+  --border-2:  #d4dae8;
+  --accent:    #4f63f0;
+  --accent-2:  #7c5cf4;
+  --accent-ink:#3345c9;
+  --accent-soft: rgba(79, 99, 240, .10);
+  --wave:      #c9d1e4;
+  --ok:        #14a37f;
+  --warn:      #d97706;
+  --arrow:     #93a0bd;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, .05);
+  --shadow:    0 1px 2px rgba(16, 24, 40, .04), 0 10px 28px -12px rgba(16, 24, 40, .18);
+  --shadow-lg: 0 2px 4px rgba(16, 24, 40, .05), 0 26px 60px -28px rgba(16, 24, 40, .32);
+  --radius:    16px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+  --maxw:      1480px;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+[data-theme="dark"] {
+  --bg:        #0a0d16;
+  --bg-soft:   #0f1420;
+  --surface:   #121826;
+  --surface-2: #182031;
+  --text:      #e9edf7;
+  --text-soft: #c3cbe0;
+  --muted:     #8d98b4;
+  --border:    #222c42;
+  --border-2:  #2c3852;
+  --accent:    #7f8dff;
+  --accent-2:  #a78bfa;
+  --accent-ink:#a9b4ff;
+  --accent-soft: rgba(127, 141, 255, .14);
+  --wave:      #2b3550;
+  --ok:        #34d3a6;
+  --arrow:     #55628a;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow:    0 1px 2px rgba(0, 0, 0, .35), 0 14px 34px -14px rgba(0, 0, 0, .7);
+  --shadow-lg: 0 2px 6px rgba(0, 0, 0, .45), 0 30px 70px -30px rgba(0, 0, 0, .85);
+}
+
+/* ------------------------------- base -------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 84px; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background .25s ease, color .25s ease;
+}
+
+img, svg { max-width: 100%; }
+a { color: var(--accent-ink); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3, h4 { line-height: 1.25; margin: 0 0 .5rem; letter-spacing: -.015em; }
+p { margin: 0 0 1rem; }
+button { font: inherit; color: inherit; }
+.muted { color: var(--muted); }
+.small { font-size: .875rem; }
+
+.wrap { width: min(100% - 2.5rem, var(--maxw)); margin-inline: auto; }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: var(--accent); color: #fff; padding: .6rem 1rem; border-radius: 0 0 8px 0;
+}
+.skip-link:focus { left: 0; }
+
+:focus-visible { outline: 2.5px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+/* ------------------------------- header ------------------------------ */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+@supports not (background: color-mix(in srgb, red 50%, blue)) {
+  .site-header { background: var(--bg); }
+}
+.site-header.is-stuck { border-bottom-color: var(--border); box-shadow: var(--shadow-sm); }
+
+.header-inner { display: flex; align-items: center; gap: 1rem; height: 64px; }
+
+.brand { display: inline-flex; align-items: center; gap: .55rem; color: var(--text); font-weight: 600; }
+.brand:hover { text-decoration: none; }
+.brand-mark {
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; box-shadow: var(--shadow-sm);
+}
+.brand-mark svg { width: 19px; height: 19px; }
+.brand-text { font-size: 1.02rem; letter-spacing: -.02em; }
+.brand-text strong { font-weight: 750; }
+
+.nav { display: flex; gap: .35rem; margin-left: auto; }
+.nav a {
+  color: var(--muted); font-size: .9rem; font-weight: 500;
+  padding: .4rem .7rem; border-radius: var(--radius-pill); transition: color .15s, background .15s;
+}
+.nav a:hover, .nav a.active { color: var(--text); background: var(--surface-2); text-decoration: none; }
+
+.header-actions { display: flex; align-items: center; gap: .5rem; margin-left: auto; }
+.nav + .header-actions { margin-left: 0; }
+
+/* ------------------------------- buttons ----------------------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .56rem .95rem; border-radius: var(--radius-pill);
+  border: 1px solid var(--border-2); background: var(--surface); color: var(--text);
+  font-size: .9rem; font-weight: 550; cursor: pointer; white-space: nowrap;
+  transition: transform .12s, box-shadow .18s, border-color .18s, background .18s, color .18s;
+  box-shadow: var(--shadow-sm);
+}
+.btn:hover { border-color: var(--accent); color: var(--accent-ink); text-decoration: none; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn .ic { width: 17px; height: 17px; flex: 0 0 auto; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: transparent; color: #fff;
+}
+.btn-primary:hover { color: #fff; box-shadow: 0 10px 24px -10px var(--accent); }
+
+.btn-ghost { background: transparent; border-color: transparent; box-shadow: none; color: var(--muted); }
+.btn-ghost:hover { background: var(--surface-2); border-color: transparent; color: var(--text); }
+.btn-ghost[aria-pressed="true"] {
+  background: var(--accent-soft); color: var(--accent-ink); border-color: transparent;
+}
+.btn-icon { padding: .5rem; border-radius: 50%; }
+.btn-icon .ic { width: 18px; height: 18px; }
+
+[data-theme="light"] .ic-moon { display: none; }
+[data-theme="dark"]  .ic-sun  { display: none; }
+
+/* ------------------------------- hero -------------------------------- */
+.hero { position: relative; padding: 3.6rem 0 2.6rem; overflow: hidden; }
+.hero-glow {
+  position: absolute; inset: -30% -10% auto -10%; height: 520px; pointer-events: none;
+  background:
+    radial-gradient(46% 60% at 22% 40%, var(--accent-soft), transparent 70%),
+    radial-gradient(42% 55% at 78% 20%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 72%);
+  filter: blur(6px);
+}
+.hero-inner { position: relative; text-align: center; }
+
+.venue {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--accent-ink); background: var(--accent-soft);
+  padding: .35rem .8rem; border-radius: var(--radius-pill); margin: 0 0 1.1rem;
+}
+.venue-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+
+.title {
+  /* The full paper title is ~37.4em wide at Times' metrics. Font-size is derived
+     from the viewport so the title always occupies a single line; the divisor is
+     set to 39 (not 37.4) so ~4% of slack absorbs differences between the actual
+     serif metrics and this estimate. The 2.0rem cap stops the offset at 1360px:
+     an unconstrained 37.4em line would need ~1350px of type, more than any
+     viewport-worth of text column. Below 720px the nowrap is released. */
+  font-size: min(2rem, calc((100vw - 4.5rem) / 39));
+  font-weight: 760; letter-spacing: -.03em; line-height: 1.16;
+  margin: 0 auto 1.1rem; max-width: none;
+  white-space: nowrap;
+}
+.authors { font-size: 1.05rem; font-weight: 600; margin: 0 0 .2rem; }
+.affil { color: var(--muted); font-size: .92rem; margin: 0 0 1.6rem; }
+
+.cta { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+
+/* ------------------------------- sections ---------------------------- */
+.section { padding: 2.6rem 0; }
+.section-title {
+  font-size: clamp(1.3rem, 1.1rem + .8vw, 1.75rem); font-weight: 720; letter-spacing: -.02em;
+  margin: 0 0 1.2rem; display: flex; align-items: center; gap: .7rem;
+}
+.section-title::before {
+  content: ""; width: 5px; height: 1.15em; border-radius: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+}
+.lead { color: var(--muted); max-width: 76ch; margin-bottom: 1.4rem; }
+
+/* ------------------------------- abstract ---------------------------- */
+.abstract-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.6rem 1.7rem; box-shadow: var(--shadow);
+}
+.abstract-card > p { color: var(--text-soft); font-size: 1rem; }
+/* keywords line closes the abstract card */
+.keywords {
+  margin: 1.2rem 0 0; padding: 1rem 0 0; border-top: 1px dashed var(--border-2);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .7rem;
+}
+.keywords dt {
+  font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--accent-ink); background: var(--accent-soft);
+  padding: .1rem .45rem; border-radius: 6px;
+}
+.keywords dd { margin: 0; font-size: .92rem; color: var(--muted); }
+
+/* ------------------------------- figure / arch ----------------------- */
+.figure { margin: 0 0 1.8rem; }
+.figure-frame {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: .8rem; box-shadow: var(--shadow); overflow-x: auto;
+  /* the architecture diagram is dark-on-transparent, so it needs an opaque light
+     backdrop of its own — the themed --surface would swallow it in dark mode */
+  background: #fff;
+}
+[data-theme="dark"] .figure-frame { border-color: var(--border-2); }
+/* raster diagram: keep it legible on narrow screens instead of shrinking to nothing,
+   the frame scrolls horizontally */
+.arch { display: block; width: 100%; min-width: 720px; height: auto; }
+
+/* the caption element carries no class, so this is an element selector only */
+.figure figcaption { color: var(--muted); font-size: .86rem; margin-top: .7rem; line-height: 1.55; }
+.figure figcaption strong { color: var(--text-soft); }
+
+/* ------------------------------- demo -------------------------------- */
+.section-demo .lead em { color: var(--text-soft); font-style: normal; font-weight: 600; }
+
+.demo-toolbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .8rem;
+  margin-bottom: 1.1rem;
+}
+.tabs {
+  display: flex; flex-wrap: wrap; gap: .35rem; padding: .3rem;
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-pill);
+}
+.tab {
+  border: 0; background: transparent; color: var(--muted);
+  padding: .45rem 1rem; border-radius: var(--radius-pill); cursor: pointer;
+  font-size: .88rem; font-weight: 560; transition: background .18s, color .18s, box-shadow .18s;
+  display: inline-flex; align-items: center; gap: .45rem;
+}
+.tab:hover { color: var(--text); }
+.tab[aria-selected="true"] {
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm);
+}
+.tab .tab-tag {
+  font-size: .68rem; font-weight: 700; padding: .05rem .38rem; border-radius: var(--radius-pill);
+  background: var(--accent-soft); color: var(--accent-ink); letter-spacing: .02em;
+}
+.toolbar-side { display: inline-flex; align-items: center; gap: .5rem; margin-left: auto; }
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--border-2);
+  transition: background .2s, box-shadow .2s;
+}
+.live-dot.on { background: var(--ok); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 22%, transparent); }
+
+.cond-panel[hidden] { display: none; }
+.cond-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .45rem;
+  font-size: .875rem; color: var(--muted); margin: 0 0 1rem;
+  padding-left: .85rem; border-left: 3px solid var(--border-2);
+}
+.cond-head strong { color: var(--text); font-weight: 650; }
+.cond-note { color: var(--muted); }
+
+.samples { display: grid; gap: 1.1rem; }
+.sample {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.15rem 1.2rem 1.3rem; box-shadow: var(--shadow-sm);
+  animation: rise .45s cubic-bezier(.22,.9,.3,1) both;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .sample { animation: none; } }
+
+.sample-head { margin-bottom: .95rem; }
+.sample-title { font-size: .95rem; font-weight: 650; margin: 0 0 .25rem; }
+.sample-text { font-size: .9rem; color: var(--text-soft); margin: 0 0 .35rem; font-style: italic; }
+.sample-meta { margin: 0; }
+
+/* the nine signals are laid out as three stacked rows (see COLS_PER_ROW in app.js):
+   clean/mix/bc | three baselines | two baselines + FocusMe */
+.player-grid { display: grid; gap: .8rem; }
+.player-row {
+  display: grid; gap: .8rem;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  padding-top: .8rem; border-top: 1px dashed var(--border-2);
+}
+.player-row:first-child { padding-top: 0; border-top: 0; }
+.col { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+.col-head {
+  display: flex; align-items: center; gap: .3rem; min-width: 0;
+  padding-bottom: .35rem; border-bottom: 1px dashed var(--border-2);
+}
+.col-name {
+  font-size: .78rem; font-weight: 620; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.col-dl { color: var(--border-2); display: inline-flex; flex: 0 0 auto; }
+.col-dl:hover { color: var(--accent); }
+.col-dl .ic { width: 14px; height: 14px; }
+
+.col[data-group="ref"] .col-name  { color: var(--text-soft); }
+.col[data-group="ours"] .col-name { color: var(--accent-ink); font-weight: 720; }
+/* rows already separate reference/inputs from the systems, so the per-column
+   separators are no longer needed */
+.col[data-group="ours"] { border-radius: var(--radius-sm); }
+.col[data-group="ours"] .player {
+  background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.col[data-group="baseline"] .col-name { color: var(--muted); }
+
+/* ---- player ---- */
+.player {
+  display: flex; align-items: center; gap: .4rem;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: .35rem .45rem;
+  transition: border-color .18s, background .18s, box-shadow .18s;
+  min-width: 0;
+}
+.player.is-playing { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.player.is-error { opacity: .5; }
+
+.play {
+  flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; border: 0; cursor: pointer;
+  display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  transition: transform .12s, filter .18s;
+}
+.play:hover { filter: brightness(1.07); }
+.play:active { transform: scale(.94); }
+.play svg { width: 15px; height: 15px; fill: currentColor; }
+.play .i-pause { display: none; }
+.player.is-playing .play .i-play { display: none; }
+.player.is-playing .play .i-pause { display: block; }
+
+.wave-wrap { flex: 1 1 46px; min-width: 34px; cursor: pointer; touch-action: none; }
+.wave { display: block; width: 100%; height: 36px; }
+.time {
+  flex: 0 0 auto; font-size: .66rem; color: var(--muted);
+  font-variant-numeric: tabular-nums; letter-spacing: -.01em;
+}
+
+/* blind mode: neutralise the "ours" highlight + hide ordering cues */
+body.is-blind .col[data-group="ours"] .player { background: var(--surface-2); border-color: var(--border); }
+body.is-blind .col[data-group="ours"] .col-name { color: var(--text-soft); font-weight: 620; }
+body.is-blind .col-name { color: var(--text-soft) !important; }
+
+/* ------------------------------- footer ------------------------------ */
+.site-footer { border-top: 1px solid var(--border); padding: 1.8rem 0 2.4rem; margin-top: 1.5rem; }
+.footer-inner { text-align: center; }
+.footer-inner p { margin: 0 0 .3rem; font-size: .85rem; color: var(--muted); }
+
+.toast {
+  position: fixed; left: 50%; bottom: 1.6rem; transform: translate(-50%, 12px);
+  background: var(--text); color: var(--bg); padding: .55rem 1rem; border-radius: var(--radius-pill);
+  font-size: .85rem; font-weight: 550; opacity: 0; pointer-events: none; z-index: 200;
+  transition: opacity .22s, transform .22s; box-shadow: var(--shadow);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ------------------------------- responsive -------------------------- */
+/* one shared track for the whole page (--maxw), so the hero, the method figure and
+   the nine-column audio grid all start on the same left edge */
+@media (max-width: 860px) {
+  .nav { display: none; }
+  .header-actions { margin-left: auto; }
+  .blind-btn span { display: none; }
+  .blind-btn { padding: .5rem; border-radius: 50%; }
+}
+/* one line stops being feasible: release the nowrap, force the intended break */
+@media (max-width: 720px) {
+  .title { white-space: normal; font-size: clamp(1.5rem, 1.05rem + 2vw, 2rem); }
+  .br-lg { display: inline; }
+}
+@media (max-width: 620px) {
+  html { scroll-padding-top: 72px; }
+  .wrap { width: min(100% - 1.6rem, var(--maxw)); }
+  .hero { padding-top: 2.4rem; }
+  .abstract-card { padding: 1.2rem; }
+  .sample { padding: 1rem .9rem 1.1rem; }
+  .tabs { width: 100%; }
+  .tab { flex: 1 1 auto; justify-content: center; }
+  .toolbar-side { margin-left: 0; }
+}
+/* three columns get cramped below this: fall back to two per row, then one */
+@media (max-width: 560px) {
+  .player-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) {
+  .player-row { grid-template-columns: 1fr; }
+}
+
+@media print {
+  .site-header, .demo-toolbar, .player, .cta { display: none; }
+  body { background: #fff; }
+}
+/* ------------------------------- patches ----------------------------- */
+#demoPanel:not(.is-ready) { opacity: 0; }
+#demoPanel { transition: opacity .35s ease; }
+.player.is-error { position: relative; }
+.player.is-error::after {
+  content: "⚠"; position: absolute; right: .35rem; top: 50%; transform: translateY(-50%);
+  font-size: .8rem; color: var(--warn);
+}
+/* small hooks kept for clarity */
+.author   { font-weight: 600; }
+.col-slot { min-width: 0; }
